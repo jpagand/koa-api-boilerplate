@@ -1,0 +1,25 @@
+import 'babel-polyfill'
+import api from '../api'
+import supertest from 'supertest'
+import {expect, should} from 'chai'
+import {cleanDb, authUser} from './utils'
+
+should()
+const request = supertest.agent(api.listen())
+const context = {}
+describe('{{properCase name}}', () => {
+    before((done) => {
+        cleanDb()
+       {{#if wantPrivate}}
+        authUser(request, (err, {user, token}) => {
+            if (err) {
+                return done(err)
+            }
+
+            context.user = user
+            context.token = token
+            done()
+        })
+        {{/if}}
+    })
+})

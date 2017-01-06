@@ -1,0 +1,56 @@
+
+    describe(`{{ constantCase method }}  {{ url }}`, () => {
+        {{#if secureRoute}}
+        it('should not {{ properCase handler}} if the authorization header is missing', (done) => {
+            try {
+                request.{{ lowerCase method}}('{{ url }}').set('Accept', 'application/json').expect(401, done)
+            } catch (ex) {
+                console.log(ex)
+            }
+        })
+
+        it('should not {{ properCase handler}} if the authorization header is missing the scheme', (done) => {
+            request.{{ lowerCase method}}('{{ url }}').set({Accept: 'application/json', Authorization: '1'}).expect(401, done)
+        })
+
+        it('should not {{ properCase handler}} if the authorization header has invalid scheme', (done) => {
+            const {token} = context
+            request.{{ lowerCase method}}('{{ url }}').set({Accept: 'application/json', Authorization: `Unknown ${token}`}).expect(401, done)
+        })
+
+        it('should not {{ properCase handler}} if token is invalid', (done) => {
+            request.{{ lowerCase method}}('{{ url }}').set({Accept: 'application/json', Authorization: 'Bearer 1'}).expect(401, done)
+        })
+        it('should {{ properCase handler}}', (done) => {
+            const {token} = context
+            request.{{ lowerCase method}}('{{ url }}').set({Accept: 'application/json', Authorization: `Bearer ${token}`}).expect(200, (err, res) => {
+                if (err) {
+                    return done(err)
+                }
+
+                // TODO ex : res.body.should.have.property('users')
+
+                // TODO res.body.users.should.have.length(1)
+
+                done()
+            })
+        })
+        {{else}}
+        it('should {{ properCase handler}}', (done) => {
+            request.{{ lowerCase method}}('{{ url }}').set({Accept: 'application/json'}).expect(200, (err, res) => {
+                if (err) {
+                    return done(err)
+                }
+
+                // TODO : More advanced test
+                /*
+                ex : res.body.should.have.property('users')
+                        res.body.users.should.have.length(1)
+                */
+
+                done()
+            })
+        })
+        {{/if}}
+    })
+$1

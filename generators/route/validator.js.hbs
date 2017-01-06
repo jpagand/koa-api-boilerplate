@@ -1,0 +1,11 @@
+
+const {{ camelCase handler }} = convert(function * (next) {
+    yield this.validateBody({}, null, {})
+
+    if (this.validationErrors) {
+        this.throw(this.validationErrors, 422)
+    } else {
+        yield next
+    }
+})
+$1{{ camelCase handler }}, 

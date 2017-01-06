@@ -1,0 +1,21 @@
+/*
+ *
+ * {{ lowerCase name }} routes
+ *
+ */
+{{#if wantPrivate}}
+import {ensureUser} from '../../middleware/validators'  // eslint-disable-line
+{{/if}}
+{{#if wantValidators}}
+import * as validators from './validators' // eslint-disable-line
+{{/if}}
+
+import * as {{ camelCase name }} from './controller'
+
+export const baseUrl = '/{{ lowerCase name }}'
+
+const routes = [
+
+]
+
+export default routes
