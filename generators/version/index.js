@@ -21,11 +21,15 @@ module.exports = {
                         : true
                 }
                 return 'Wrong version name'
-            }
-        }
+            },
+        },
     ],
     actions: (data) => {
-        fs.mkdirSync(path.resolve(process.cwd(), 'src/modules', `${data.name}`))
-        return []
-    }
+        return [
+            () => {
+                fs.mkdirSync(path.resolve(process.cwd(), 'src/modules', `${data.name}`))
+                return Promise.resolve(`Version ${data.name} successfully created !`)
+            },
+        ]
+    },
 }
