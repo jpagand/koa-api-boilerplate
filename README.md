@@ -31,26 +31,30 @@ KoaJS api boilerplate with generators to easly handle versionning &amp; avoid bo
     ```
 
 2. Change project name
-- [OSX](#osx)
+- OSX
     ```
     find . -type f -name '*.*' -exec sed -i '' s/koa-api-boilerplate/PROJECT_NAME/ {} +
     ```
-- [LINUX](#linux)
+- LINUX
     ```
     find . -name "*.txt" -print | xargs sed -i 's/koa-api-boilerplate/PROJECT_NAME/g'
     ```
 
 2. Change git project remote origin
-git remote set-url origin https://github.com/USERNAME/YOURREPOSITORY.git
+    ```
+    git remote set-url origin https://github.com/USERNAME/YOURREPOSITORY.git
+    ```
 
 3. Install dependencies
-npm install
+    ```
+    npm install
+    ```
 
 ---
 
 ### Commands
 
-1. [Run](#run)
+1. Run
 - development
     ```
     npm run dev
@@ -60,22 +64,22 @@ npm install
     npm run prod
     ```
 
-2. [Run tests](#run-tests)
+2. Run tests
     ```
     npm run test
     ```
 
-3. [Run generators](#run-generators)
+3. Run generators
     ```
     npm run generate [generator-name](#list-of-generators)
     ```
 
-4. [Generate api documentation](#generate-api-documentation)
+4. Generate api documentation
     ```
     npm run doc
     ```
 
-5. [Populate Mongo](#populate-mongo)
+5. Populate Mongo
     ```
     npm run populate
     ```
