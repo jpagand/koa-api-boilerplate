@@ -96,14 +96,13 @@ module.exports = {
                 actions.push((action, data) => {
                     try {
                         return generatorRunner.runGeneratorActions({actions: routeActions}, routeData).then(result => {
-                            return Promise.resolve('route generated').then(() => {
-                                result.changes.forEach(function (line) {
-                                    console.log(chalk.green('[SUCCESS]'), line.type, line.path)
-                                })
-                                result.failures.forEach(function (line) {
-                                    console.log(chalk.red('[FAILED]'), line)
-                                })
+                            result.changes.forEach(function (line) {
+                                console.log(chalk.green('[SUCCESS]'), line.type, line.path)
                             })
+                            result.failures.forEach(function (line) {
+                                console.log(chalk.red('[FAILED]'), line)
+                            })
+                            return Promise.resolve('routes generated')
                         })
                     } catch (e) {
                         console.log(e)
