@@ -1,7 +1,10 @@
-$1
-    {
-        method: '{{ constantCase method }}',
-        route: '/{{ path }}',
-        handlers: [{{#if secureRoute}}ensureUser, {{/if}}{{#if validateRoute}}validators.{{ camelCase handler }}, {{/if}}{{ camelCase module }}.{{ camelCase handler }}
-        ]
-    },
+{
+    method: '{{ constantCase method }}',
+    route: '/{{ path }}',
+    handlers: [{{#if secureRoute}}
+        ensureUser, {{/if}}{{#if validateRoute}}
+        validators.{{ camelCase handler }}, {{/if}}
+        {{ camelCase module }}.{{ camelCase handler }}
+    ]
+},
+$1$2

@@ -1,25 +1,27 @@
 import 'babel-polyfill'
-import api from '../api'
+import api from 'api'
 import supertest from 'supertest'
 import {expect, should} from 'chai'
-import {cleanDb, authUser} from './utils'
+import {cleanDb, authUser} from '../utils'
 
 should()
 const request = supertest.agent(api.listen())
 const context = {}
-describe('{{properCase name}}', () => {
+describe('{{properCase module}}', () => {
     before((done) => {
         cleanDb()
        {{#if wantPrivate}}
-        authUser(request, (err, {user, token}) => {
+        authUser(request, (err, credentials) => {
             if (err) {
                 return done(err)
             }
 
-            context.user = user
-            context.token = token
+            context.user = credentials.user
+            context.token = credentials.token
             done()
         })
         {{/if}}
     })
+
+    /* GENERATED: TEST DO NOT TOUCH */
 })

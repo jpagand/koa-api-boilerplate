@@ -4,18 +4,18 @@
  *
  */
 {{#if wantPrivate}}
-import {ensureUser} from '../../middleware/validators'  // eslint-disable-line
+import {ensureUser} from 'middleware/validators'  // eslint-disable-line
 {{/if}}
 {{#if wantValidators}}
 import * as validators from './validators' // eslint-disable-line
 {{/if}}
 
-import * as {{ camelCase name }} from './controller'
+import * as {{ camelCase module }} from './controller'
 
-export const baseUrl = '/{{ lowerCase name }}'
+export const baseUrl = '/{{ lowerCase module }}'
 
 const routes = [
-
+    /* GENERATED: ROUTES DO NOT TOUCH */
 ]
 
 export default routes

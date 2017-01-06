@@ -10,7 +10,7 @@ export function cleanDb () {
 }
 
 export function authUser (agent, callback) {
-    agent.post(`v1/users`).set('Accept', 'application/json').send({email: 'test@koa-api-boilerplate.ch', password: 'password', firstName: 'test', lastName: 'Koa'}).end((err, res) => {
+    agent.post(`/v1/users`).set('Accept', 'application/json').send({email: 'test@koa-api-boilerplate.ch', password: 'password', firstName: 'test', lastName: 'Koa'}).end((err, res) => {
         if (err) {
             return callback(err)
         }

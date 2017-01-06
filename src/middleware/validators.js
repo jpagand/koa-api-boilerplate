@@ -11,7 +11,7 @@ export async function ensureUser (ctx, next) {
     const token = getToken(ctx)
 
     if (!token) {
-        ctx.throw(403)
+        ctx.throw(401)
         return next()
     }
 

@@ -2,9 +2,9 @@
  * version Generator
  */
 
-const versionExists = require('../utils/versionExists');
-const fs = require('fs');
-const path = require('path');
+const versionExists = require('../utils/versionExists')
+const fs = require('fs')
+const path = require('path')
 
 module.exports = {
     description: 'Add a version to the api',
@@ -13,19 +13,19 @@ module.exports = {
             type: 'input',
             name: 'name',
             message: 'What should it be called?',
-            default: 'test',
+            default: 'v2',
             validate: (value) => {
                 if ((/v.+/).test(value)) {
                     return versionExists(value)
                         ? 'this version number already exists'
-                        : true;
+                        : true
                 }
-                return 'Wrong version name';
+                return 'Wrong version name'
             }
         }
     ],
     actions: (data) => {
-        fs.mkdirSync(path.resolve(process.cwd(), 'src/modules', `${data.name}` ));
-        return [];
+        fs.mkdirSync(path.resolve(process.cwd(), 'src/modules', `${data.name}`))
+        return []
     }
-};
+}

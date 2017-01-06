@@ -2,51 +2,57 @@
  * Apimodule Generator
  */
 
-const moduleExists = require('../utils/moduleExists');
-const versionExists = require('../utils/versionExists');
-const toCamelCase = require('../utils/camelCase');
+const moduleExists = require('../utils/moduleExists')
+const versionExists = require('../utils/versionExists')
+const toDashCase = require('../utils/dashCase')
+const chalk = require('chalk')
 
-const routeActions = require('../route').actions;
-const routePrompts = require('../route').prompts;
+const routeActions = require('../route').actions
+const routePrompts = require('../route').routePrompts
 
+const plop = require('node-plop')
+const generatorRunner = require('node-plop/lib/modules/generator-runner').default(plop())
+
+let version = 'v1'
 module.exports = {
     description: 'Add a module to the api',
     prompts: [
         {
-           type: 'input',
-           name: 'version',
-           message: 'Enter the version',
-           default: 'v1',
-           validate: (value) => {
-               if ((/v.+/).test(value) && versionExists(value)) {
-                   return true;
-               }
+            type: 'input',
+            name: 'version',
+            message: 'Enter the version',
+            default: 'v1',
+            validate: (value) => {
+                if ((/v.+/).test(value) && versionExists(value)) {
+                    version = value
+                    return true
+                }
 
-               return 'This version name doesn\'t exists';
-           }
-       }, {
+                return 'This version name doesn\'t exists'
+            }
+        }, {
             type: 'input',
             name: 'module',
             message: 'What should it be called?',
             default: 'test',
             validate: (value) => {
                 if ((/.+/).test(value)) {
-                    return moduleExists(value)
+                    return moduleExists(value, version)
                         ? 'A component or container with this name already exists'
-                        : true;
+                        : true
                 }
 
-                return 'The name is required';
+                return 'The name is required'
             }
         }, {
             type: 'confirm',
             name: 'wantPrivate',
-            default: false,
+            default: true,
             message: 'Do you want some private routes?'
         }, {
             type: 'confirm',
             name: 'wantValidators',
-            default: false,
+            default: true,
             message: 'Do you want parameters validation for some routes?'
         }, {
             type: 'recursive',
@@ -56,36 +62,55 @@ module.exports = {
         }
     ],
     actions: (data) => {
+        const versionName = toDashCase(version).toLowerCase()
+        const moduleName = toDashCase(data.module).toLowerCase()
+
         let actions = [
             {
                 type: 'add',
-                path: process.cwd()  + '/src/modules/{{lowercase dashCase version}}/{{lowercase dashCase module}}/router.js',
+                path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/router.js`,
                 templateFile: './module/router.js.hbs',
                 abortOnFail: true
             }, {
                 type: 'add',
-                path: process.cwd()  + '/src/modules/{{lowercase dashCase version}}/{{lowercase dashCase module}}/controller.js',
+                path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/controller.js`,
                 templateFile: './module/controller.js.hbs',
                 abortOnFail: true
             }, {
                 type: 'add',
-                path: process.cwd()  + '/src/modules/{{lowercase dashCase version}}/{{lowercase dashCase module}}/validators.js',
+                path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/validators.js`,
                 templateFile: './module/validators.js.hbs',
                 abortOnFail: true
             }, {
                 type: 'add',
-                path: process.cwd()  + '/test/{{lowercase dashCase version}}/{{lowercase dashCase module}}.spec.js',
+                path: `${process.cwd()}/test/${versionName}/${moduleName}.spec.js`,
                 templateFile: './module/test.js.hbs',
                 abortOnFail: true
             }
-        ];
+        ]
 
-
-        if(data.routes) {
-            data.routes.forEach((routeData) => {
-                actions = actions.concat(routeActions(routeData));
-            });
+        if (data.routes) {
+            data.routes.forEach((routeData, i) => {
+                routeData.version = version
+                routeData.module = data.module
+                actions.push((action, data) => {
+                    try {
+                        return generatorRunner.runGeneratorActions({actions: routeActions}, routeData).then(result => {
+                            return Promise.resolve('route generated').then(() => {
+                                result.changes.forEach(function (line) {
+                                    console.log(chalk.green('[SUCCESS]'), line.type, line.path)
+                                })
+                                result.failures.forEach(function (line) {
+                                    console.log(chalk.red('[FAILED]'), line)
+                                })
+                            })
+                        })
+                    } catch (e) {
+                        console.log(e)
+                    }
+                })
+            })
         }
-        return actions;
+        return actions
     }
-};
+}
