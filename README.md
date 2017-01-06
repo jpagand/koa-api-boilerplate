@@ -10,20 +10,19 @@ KoaJS api boilerplate with generators to easly handle versionning &amp; avoid bo
 - [What is inside](#what-is-inside)
 - [List of generators](#list-of-generators)
 - [Philosophy](#philosophy)
-    - [Technologies](#technologies)
     - [Prerequisites](#prerequisites)
     - [Folder Hierarchy](#folder-hierarchy)
 - [Team](#team)
 
-## [Language and Preprocessor](#language-preprocessor)
+## Language and Preprocessor
 * [ES6](http://es6-features.org)
 * [Babel](https://babeljs.io/)
 
 ---
 
-## [Get started](#get-started)
+## Get started
 
-### [Installation](#installation)
+### Installation
 
 1. Clone project
     ```
@@ -48,7 +47,7 @@ npm install
 
 ---
 
-### [Commands](#commands)
+### Commands
 
 1. [Run](#run)
 - development
@@ -82,7 +81,7 @@ npm install
 
 ---
 
-## [What is inside](#what-is-inside):
+## What is inside
 - Api documentation with [apidoc](http://apidocjs.com/)
 - Api versionning
 - MongoDB with [mongoose] (http://mongoosejs.com/)
@@ -93,7 +92,7 @@ npm install
 
 ---
 
-## [List of generators](#list-of-generators):
+## List of generators:
 - Version
 - Module
 - Route
@@ -101,17 +100,14 @@ npm install
 
 ---
 
-## [Backend Philosophy](#philosophy)
+## Backend Philosophy
 
-### [Technologies](#technologies)
-* [Koa](http://koajs.com/)
-
-### [Prerequisites](#prerequisites)
+### Prerequisites:
 - [Koajs](http://koajs.com/)
 - [Mongoose](http://mongoosejs.com/)
 - [ES6](http://ccoenraets.github.io/es6-tutorial/)
 
-### [Folder Hierarchy](#folder-hierarchy):
+### Folder Hierarchy:
     - src
         - config
             - db
@@ -171,11 +167,11 @@ npm install
 
 ---
 
-## [TODO](#todo):
+## TODO:
 - Generate CRUD from a model
 - Implement Facebook & Google authentication
 
 ---
 
-## [Team](#team):
+## Team:
 * [Nathan Loisel](https://github.com/nathanloisel)
