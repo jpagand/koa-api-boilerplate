@@ -3,7 +3,7 @@ KoaJS api boilerplate with generators to easly handle versionning &amp; avoid bo
 
 
 ## Content
-- [Language](#language-preprocessor)
+- [Language](#language-and-preprocessor)
 - [Get started](#get-started)
     - [Installation](#installation)
     - [Commands](#commands)
@@ -15,7 +15,7 @@ KoaJS api boilerplate with generators to easly handle versionning &amp; avoid bo
     - [Folder Hierarchy](#folder-hierarchy)
 - [Team](#team)
 
-## [Language & Preprocessor](#language-preprocessor)
+## [Language and Preprocessor](#language-preprocessor)
 * [ES6](http://es6-features.org)
 * [Babel](https://babeljs.io/)
 
