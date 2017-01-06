@@ -1,5 +1,5 @@
 import {
-    ensureUser
+    ensureUser,
 } from 'middleware/validators'
 import * as user from './controller'
 
@@ -10,16 +10,16 @@ const routes = [
         method: 'POST',
         route: '/',
         handlers: [
-            user.createUser
-        ]
+            user.createUser,
+        ],
     },
     {
         method: 'GET',
         route: '/',
         handlers: [
             ensureUser,
-            user.getUser
-        ]
+            user.getUser,
+        ],
     },
     {
         method: 'PUT',
@@ -27,8 +27,8 @@ const routes = [
         handlers: [
             ensureUser,
             user.getUser,
-            user.updateUser
-        ]
+            user.updateUser,
+        ],
     },
     {
         method: 'DELETE',
@@ -36,9 +36,10 @@ const routes = [
         handlers: [
             ensureUser,
             user.getUser,
-            user.deleteUser
-        ]
-    }
+            user.deleteUser,
+        ],
+    },
+    /* GENERATED: ROUTES DO NOT TOUCH */
 ]
 
 export

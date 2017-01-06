@@ -14,5 +14,6 @@
                 "SwitchCase": 1
             }
         ],
+        "comma-dangle": ["error", "always"]
     }
 }

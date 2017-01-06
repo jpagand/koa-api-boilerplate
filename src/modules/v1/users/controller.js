@@ -49,9 +49,9 @@ const createUser = async(ctx) => {
                     'email': {
                         type: 'uniqueEmail',
                         rule: 'unique',
-                        message: 'Email can\'t be the same for 2 users.'
-                    }
-                }
+                        message: 'Email can\'t be the same for 2 users.',
+                    },
+                },
             })
         } else {
             ctx.throw(422, err)
@@ -65,7 +65,7 @@ const createUser = async(ctx) => {
 
     ctx.body = {
         user: response,
-        token
+        token,
     }
 }
 
@@ -98,7 +98,7 @@ const createUser = async(ctx) => {
  */
 const getUser = async(ctx, next) => {
     ctx.body = {
-        user: ctx.state.user
+        user: ctx.state.user,
     }
 }
 
@@ -150,7 +150,7 @@ const updateUser = async(ctx) => {
     await user.save()
 
     ctx.body = {
-        user
+        user,
     }
 }
 
@@ -182,8 +182,16 @@ const deleteUser = async(ctx) => {
 
     ctx.status = 200
     ctx.body = {
-        success: true
+        success: true,
     }
 }
 
-export {createUser, getUser, updateUser, deleteUser}
+/* GENERATED: HANDLER DO NOT TOUCH */
+
+export {
+    createUser,
+    getUser,
+    updateUser,
+    deleteUser,
+    /* GENERATED: EXPORT HANDLER DO NOT TOUCH */
+}
