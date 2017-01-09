@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+const Types = mongoose.Schema.Types
 
 const {{ properCase name }} = new mongoose.Schema({
     type: {
@@ -6,7 +7,7 @@ const {{ properCase name }} = new mongoose.Schema({
         default: '{{ properCase name }}'
     },
     {{#each fields}}{{camelCase this.name}}: {
-        type: {{properCase this.type}},{{#if this.required}}
+        type: Types.{{properCase this.type}},{{#if this.required}}
         required: true,{{/if}}{{#if this.unique}}
         unique: true,{{/if}}
     },

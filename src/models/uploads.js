@@ -3,25 +3,25 @@ import mongoose from 'mongoose'
 const Upload = new mongoose.Schema({
     type: {
         type: String,
-        default: 'Upload'
+        default: 'Upload',
     },
     path: {
         type: String,
         unique: true,
-        required: true
+        required: true,
     },
     name: {
         type: String,
-        required: true
+        required: true,
     },
     size: {
         type: Number,
-        required: true
+        required: true,
     },
     mimeType: {
         type: String,
-        required: true
-    }
-})
+        required: true,
+    },
+}, { timestamps: true, })
 
 export default mongoose.model('upload', Upload)
