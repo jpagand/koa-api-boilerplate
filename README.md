@@ -29,23 +29,7 @@ KoaJS api boilerplate with generators to easly handle versionning &amp; avoid bo
     ```
     git clone https://github.com/nathanloisel/koa-api-boilerplate [PATH/TO/YOUR/PROJECT_NAME]
     ```
-
-2. Change project name
-- OSX
-    ```
-    find . -type f -name '*.*' -exec sed -i '' s/koa-api-boilerplate/PROJECT_NAME/ {} +
-    ```
-- LINUX
-    ```
-    find . -name "*.txt" -print | xargs sed -i 's/koa-api-boilerplate/PROJECT_NAME/g'
-    ```
-
-2. Change git project remote origin
-    ```
-    git remote set-url origin https://github.com/USERNAME/YOURREPOSITORY.git
-    ```
-
-3. Install dependencies
+2. Install dependencies
     ```
     npm install
     ```
@@ -98,10 +82,14 @@ KoaJS api boilerplate with generators to easly handle versionning &amp; avoid bo
 ---
 
 ## List of generators:
-- Version
-- Module
-- Route
-- Mongoose Model : `npm run generate model`
+1. Version
+`npm run generate module`
+2. Module
+`npm run generate module`
+3. Route
+`npm run generate route`
+4. Mongoose Model
+`npm run generate model`
 
 ---
 
@@ -173,8 +161,9 @@ KoaJS api boilerplate with generators to easly handle versionning &amp; avoid bo
 ---
 
 ## TODO:
-- Generate CRUD from a model
+- Improve generators (generate CRUD module for a model, ...)
 - Implement Facebook & Google authentication
+- ...
 
 ---
 
