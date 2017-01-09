@@ -1,6 +1,6 @@
 {
     method: '{{ constantCase method }}',
-    route: '/{{ path }}',
+    route: '{{ path }}',
     handlers: [{{#if secureRoute}}
         ensureUser, {{/if}}{{#if validateRoute}}
         validators.{{ camelCase handler }}, {{/if}}

@@ -22,13 +22,13 @@ const routePrompts = [
         type: 'input',
         name: 'path',
         message: 'Enter the path of the route. (module name will be the base url)',
-        default: 'test',
+        default: '/',
         validate: (value) => {
-            if ((/\/.+/).test(value)) {
-                return 'invalide path : (profile/:id or test)'
+            if (!(/\/.+/).test(value)) {
+                return 'invalide path : (/profile/:id or /test)'
             }
             return true
-        }
+        },
     }, {
         type: 'input',
         name: 'method',
@@ -40,7 +40,7 @@ const routePrompts = [
             }
 
             return 'invalid method'
-        }
+        },
     }, {
         type: 'input',
         name: 'handler',
@@ -52,18 +52,18 @@ const routePrompts = [
             }
 
             return 'hanlder is required'
-        }
+        },
     }, {
         type: 'confirm',
         name: 'secureRoute',
         default: false,
-        message: 'Does it is secured?'
+        message: 'Does it is secured?',
     }, {
         type: 'confirm',
         name: 'validateRoute',
         default: false,
-        message: 'Does it need parameter validation?'
-    }
+        message: 'Does it need parameter validation?',
+    },
 ]
 
 const prompts = [
@@ -79,7 +79,7 @@ const prompts = [
             }
 
             return 'This version name doesn\'t exists'
-        }
+        },
     }, {
         type: 'input',
         name: 'module',
@@ -93,9 +93,9 @@ const prompts = [
             }
 
             return 'The module is required'
-        }
+        },
     },
-    ...routePrompts
+    ...routePrompts,
 ]
 
 const actions = (data) => {
@@ -104,48 +104,53 @@ const actions = (data) => {
     const moduleName = toDashCase(data.module).toLowerCase()
 
     if (data.path !== '') {
-        data.url = `/${versionName}/${moduleName}/${data.path}`
+        data.url = `/${versionName}/${moduleName}${data.path}`
     } else {
         data.url = `/${versionName}/${moduleName}`
     }
-    return [
+    const actions = [
         {
             type: 'modify',
             path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/router.js`,
             pattern: /(\n\s*)(\/\* GENERATED: ROUTES .*\*\/)/g,
-            template: trimTemplateFile('router.js.hbs')
+            template: trimTemplateFile('router.js.hbs'),
         }, {
             type: 'modify',
             path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/controller.js`,
             pattern: /(\n\s*\/\* GENERATED: HANDLER .*\*\/)/g,
-            template: trimTemplateFile('handler.js.hbs')
+            template: trimTemplateFile('handler.js.hbs'),
         }, {
             type: 'modify',
             path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/controller.js`,
             pattern: /(\n\s*)(\/\* GENERATED: EXPORT.*\*\/)/g,
-            template: '$1{{ camelCase handler }},$1$2'
-        }, {
-            type: 'modify',
-            path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/validators.js`,
-            pattern: /(\/\* GENERATED: VALIDATOR .*\*\/)/g,
-            template: trimTemplateFile('validator.js.hbs')
+            template: '$1{{ camelCase handler }},$1$2',
         }, {
             type: 'modify',
             path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/validators.js`,
             pattern: /(\n\s*)(\/\* GENERATED: EXPORT .*\*\/)/g,
-            template: '$1{{ camelCase handler }},$1$2 '
+            template: '$1{{ camelCase handler }},$1$2 ',
         }, {
             type: 'modify',
             path: `${process.cwd()}/test/${versionName}/${moduleName}.spec.js`,
             pattern: /(\n\s*)(\/\* GENERATED: TEST .*\*\/)/g,
-            template: trimTemplateFile('test.js.hbs')
-        }
+            template: trimTemplateFile('test.js.hbs'),
+        },
     ]
+
+    if (data.validateRoute) {
+        actions.push({
+            type: 'modify',
+            path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/validators.js`,
+            pattern: /(\/\* GENERATED: VALIDATOR .*\*\/)/g,
+            template: trimTemplateFile('validator.js.hbs'),
+        })
+    }
+    return actions
 }
 
 module.exports = {
     description: 'Add a route',
     prompts,
     actions,
-    routePrompts
+    routePrompts,
 }
