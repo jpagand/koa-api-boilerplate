@@ -29,7 +29,7 @@ module.exports = {
                 }
 
                 return 'This version name doesn\'t exists'
-            }
+            },
         }, {
             type: 'input',
             name: 'module',
@@ -43,23 +43,23 @@ module.exports = {
                 }
 
                 return 'The name is required'
-            }
+            },
         }, {
             type: 'confirm',
             name: 'wantPrivate',
             default: true,
-            message: 'Do you want some private routes?'
+            message: 'Do you want some private routes?',
         }, {
             type: 'confirm',
             name: 'wantValidators',
             default: true,
-            message: 'Do you want parameters validation for some routes?'
+            message: 'Do you want parameters validation for some routes?',
         }, {
             type: 'recursive',
             message: 'Do you want to add a ne route to the module?',
             name: 'routes',
-            prompts: routePrompts
-        }
+            prompts: routePrompts,
+        },
     ],
     actions: (data) => {
         const versionName = toDashCase(version).toLowerCase()
@@ -70,23 +70,23 @@ module.exports = {
                 type: 'add',
                 path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/router.js`,
                 templateFile: './module/router.js.hbs',
-                abortOnFail: true
+                abortOnFail: true,
             }, {
                 type: 'add',
                 path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/controller.js`,
                 templateFile: './module/controller.js.hbs',
-                abortOnFail: true
+                abortOnFail: true,
             }, {
                 type: 'add',
                 path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/validators.js`,
                 templateFile: './module/validators.js.hbs',
-                abortOnFail: true
+                abortOnFail: true,
             }, {
                 type: 'add',
                 path: `${process.cwd()}/test/${versionName}/${moduleName}.spec.js`,
                 templateFile: './module/test.js.hbs',
-                abortOnFail: true
-            }
+                abortOnFail: true,
+            },
         ]
 
         if (data.routes) {
@@ -95,7 +95,7 @@ module.exports = {
                 routeData.module = data.module
                 actions.push((action, data) => {
                     try {
-                        return generatorRunner.runGeneratorActions({actions: routeActions}, routeData).then(result => {
+                        return generatorRunner.runGeneratorActions({actions: routeActions, }, routeData).then(result => {
                             result.changes.forEach(function (line) {
                                 console.log(chalk.green('[SUCCESS]'), line.type, line.path)
                             })
@@ -111,5 +111,5 @@ module.exports = {
             })
         }
         return actions
-    }
+    },
 }

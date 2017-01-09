@@ -3,20 +3,14 @@ import mongoose from 'mongoose'
 const {{ properCase name }} = new mongoose.Schema({
     type: {
         type: String,
-        default: 'User'
+        default: '{{ properCase name }}'
     },
-    name: {
-        type: String
+    {{#each fields}}{{camelCase this.name}}: {
+        type: {{properCase this.type}},{{#if this.required}}
+        required: true,{{/if}}{{#if this.unique}}
+        unique: true,{{/if}}
     },
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    }
-})
+    {{/each}}
+}{{#if timestamps}}, {timestamps: true}{{/if}})
 
 export default mongoose.model('{{ camelCase name }}', {{ properCase name }})
