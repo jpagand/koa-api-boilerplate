@@ -126,11 +126,6 @@ const actions = (data) => {
             template: '$1{{ camelCase handler }},$1$2',
         }, {
             type: 'modify',
-            path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/validators.js`,
-            pattern: /(\n\s*)(\/\* GENERATED: EXPORT .*\*\/)/g,
-            template: '$1{{ camelCase handler }},$1$2 ',
-        }, {
-            type: 'modify',
             path: `${process.cwd()}/test/${versionName}/${moduleName}.spec.js`,
             pattern: /(\n\s*)(\/\* GENERATED: TEST .*\*\/)/g,
             template: trimTemplateFile('test.js.hbs'),
@@ -143,6 +138,12 @@ const actions = (data) => {
             path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/validators.js`,
             pattern: /(\/\* GENERATED: VALIDATOR .*\*\/)/g,
             template: trimTemplateFile('validator.js.hbs'),
+        })
+        actions.push({
+            type: 'modify',
+            path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/validators.js`,
+            pattern: /(\n\s*)(\/\* GENERATED: EXPORT .*\*\/)/g,
+            template: '$1{{ camelCase handler }},$1$2 ',
         })
     }
     return actions
