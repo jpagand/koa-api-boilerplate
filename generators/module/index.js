@@ -23,7 +23,7 @@ module.exports = {
             message: 'Enter the version',
             default: 'v1',
             validate: (value) => {
-                if ((/v.+/).test(value) && versionExists(value)) {
+                if ((/v[0-9]+/).test(value) && versionExists(value)) {
                     version = value
                     return true
                 }

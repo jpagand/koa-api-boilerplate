@@ -73,7 +73,7 @@ const prompts = [
         message: 'Enter the version',
         default: 'v1',
         validate: (value) => {
-            if ((/v.+/).test(value) && versionExists(value)) {
+            if ((/v[0-9]+/).test(value) && versionExists(value)) {
                 version = value
                 return true
             }
@@ -100,7 +100,9 @@ const prompts = [
 
 const actions = (data) => {
     data.version = toDashCase(data.version).toLowerCase()
+    data.apiVersion = data.version.replace('v', '')
     const moduleName = toDashCase(data.module).toLowerCase()
+    data.moduleName = moduleName
 
     if (data.path !== '') {
         data.url = `/${data.version}/${moduleName}${data.path}`

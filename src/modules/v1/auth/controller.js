@@ -13,7 +13,7 @@ import passport from 'koa-passport'
  */
 
 /**
- * @api {post} /auth Authenticate user
+ * @api {post} /v1/auth Authenticate user
  * @apiVersion 1.0.0
  * @apiName AuthUser
  * @apiGroup Auth
@@ -22,7 +22,7 @@ import passport from 'koa-passport'
  * @apiParam {String} password  User password.
  *
  * @apiExample Example usage:
- * curl -H "Content-Type: application/json" -X POST -d '{ "username": "johndoe@gmail.com", "password": "foo" }' localhost:5000/auth
+ * curl -H "Content-Type: application/json" -X POST -d '{ "username": "johndoe@gmail.com", "password": "foo" }' localhost:5000/v1/auth
  *
  * @apiSuccess {Object}   user           User object
  * @apiSuccess {ObjectId} user._id       User id

@@ -15,7 +15,7 @@ module.exports = {
             message: 'What should it be called?',
             default: 'v2',
             validate: (value) => {
-                if ((/v.+/).test(value)) {
+                if ((/v[0-9]+/).test(value)) {
                     return versionExists(value)
                         ? 'this version number already exists'
                         : true

@@ -1,7 +1,7 @@
 import User from 'models/users'
 
 /**
- * @api {post} /users Create a new user
+ * @api {post} /v1/users Create a new user
  * @apiPermission
  * @apiVersion 1.0.0
  * @apiName CreateUser
@@ -70,7 +70,7 @@ const createUser = async(ctx) => {
 }
 
 /**
- * @api {get} /users/:id Get user by id
+ * @api {get} /v1/users/:id Get user by id
  * @apiPermission user
  * @apiVersion 1.0.0
  * @apiName GetUser
@@ -105,7 +105,7 @@ const getUser = async(ctx, next) => {
 /**
  * @api {put} /users/:id Update a user
  * @apiPermission
- * @apiVersion 1.0.0
+ * @apiVersion 1
  * @apiName UpdateUser
  * @apiGroup Users
  *
@@ -157,7 +157,7 @@ const updateUser = async(ctx) => {
 /**
  * @api {delete} /users/:id Delete a user
  * @apiPermission
- * @apiVersion 1.0.0
+ * @apiVersion 1
  * @apiName DeleteUser
  * @apiGroup Users
  *
