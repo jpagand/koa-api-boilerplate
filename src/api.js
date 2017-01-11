@@ -26,7 +26,9 @@ const initApi = () => {
         multipart: true,
     }))
 
-    api.use(convert(logger()))
+    if (process.env.NODE_ENV !== 'test') {
+        api.use(convert(logger()))
+    }
     api.use(convert(validate()))
     KoaQuery(api)
     api.use(errorMiddleware())
