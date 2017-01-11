@@ -2,26 +2,27 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import config from 'config'
 import jwt from 'jsonwebtoken'
+
 const Types = mongoose.Schema.Types
 
 const User = new mongoose.Schema({
     type: {
-        type: String,
+        type: Types.String,
         default: 'User',
     },
     firstName: {
-        type: String,
+        type: Types.String,
     },
     lastName: {
-        type: String,
+        type: Types.String,
     },
     email: {
-        type: String,
+        type: Types.String,
         required: true,
         unique: true,
     },
     password: {
-        type: String,
+        type: Types.String,
         required: true,
     },
 }, {timestamps: true})
