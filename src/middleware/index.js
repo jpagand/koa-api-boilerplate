@@ -9,7 +9,7 @@ const errorMiddleware = () => {
             ctx.status = err.status || 500
             ctx.body = {
                 sucess: false,
-                err
+                err,
             }
             ctx.app.emit('error', err, ctx)
         }
@@ -19,5 +19,5 @@ const errorMiddleware = () => {
 export {
     documentation,
     errorMiddleware,
-    uploads
+    uploads,
 }

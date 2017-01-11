@@ -23,7 +23,7 @@ const initApi = () => {
 
     api.use(bodyParser({
         formidable: {uploadDir: `uploads`},    // This is where the files would come
-        multipart: true
+        multipart: true,
     }))
 
     api.use(convert(logger()))
@@ -37,7 +37,7 @@ const initApi = () => {
     uploads(api)
 
     api.use(compress({
-        flush: require('zlib').Z_SYNC_FLUSH
+        flush: require('zlib').Z_SYNC_FLUSH,
     }))
     return api
 }

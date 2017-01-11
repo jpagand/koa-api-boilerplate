@@ -91,13 +91,13 @@ module.exports = {
 
         if (data.routes) {
             data.routes.forEach((routeData, i) => {
-                routeData.version = version
+                routeData.version = data.version
                 routeData.module = data.module
                 actions.push((action, data) => {
                     try {
-                        return generatorRunner.runGeneratorActions({actions: routeActions, }, routeData).then(result => {
+                        return generatorRunner.runGeneratorActions({ actions: routeActions }, routeData).then(result => {
                             result.changes.forEach(function (line) {
-                                console.log(chalk.green('[SUCCESS]'), line.type, line.path)
+                                console.log(chalk.green('[SUCCESS]'), routeData.path + ' generated successfully!')
                             })
                             result.failures.forEach(function (line) {
                                 console.log(chalk.red('[FAILED]'), line)

@@ -45,9 +45,9 @@ const routePrompts = [
         type: 'input',
         name: 'handler',
         message: 'Enter the handler name',
-        default: 'test',
+        default: '/',
         validate: (value) => {
-            if ((/.+/).test(value)) {
+            if (!(/.+/).test(value)) {
                 return true
             }
 
@@ -99,34 +99,33 @@ const prompts = [
 ]
 
 const actions = (data) => {
-    console.log('route', data)
-    const versionName = toDashCase(version).toLowerCase()
+    data.version = toDashCase(data.version).toLowerCase()
     const moduleName = toDashCase(data.module).toLowerCase()
 
     if (data.path !== '') {
-        data.url = `/${versionName}/${moduleName}${data.path}`
+        data.url = `/${data.version}/${moduleName}${data.path}`
     } else {
-        data.url = `/${versionName}/${moduleName}`
+        data.url = `/${data.version}/${moduleName}`
     }
     const actions = [
         {
             type: 'modify',
-            path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/router.js`,
+            path: `${process.cwd()}/src/modules/${data.version}/${moduleName}/router.js`,
             pattern: /(\n\s*)(\/\* GENERATED: ROUTES .*\*\/)/g,
             template: trimTemplateFile('router.js.hbs'),
         }, {
             type: 'modify',
-            path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/controller.js`,
+            path: `${process.cwd()}/src/modules/${data.version}/${moduleName}/controller.js`,
             pattern: /(\n\s*\/\* GENERATED: HANDLER .*\*\/)/g,
             template: trimTemplateFile('handler.js.hbs'),
         }, {
             type: 'modify',
-            path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/controller.js`,
+            path: `${process.cwd()}/src/modules/${data.version}/${moduleName}/controller.js`,
             pattern: /(\n\s*)(\/\* GENERATED: EXPORT.*\*\/)/g,
             template: '$1{{ camelCase handler }},$1$2',
         }, {
             type: 'modify',
-            path: `${process.cwd()}/test/${versionName}/${moduleName}.spec.js`,
+            path: `${process.cwd()}/test/${data.version}/${moduleName}.spec.js`,
             pattern: /(\n\s*)(\/\* GENERATED: TEST .*\*\/)/g,
             template: trimTemplateFile('test.js.hbs'),
         },
@@ -135,13 +134,13 @@ const actions = (data) => {
     if (data.validateRoute) {
         actions.push({
             type: 'modify',
-            path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/validators.js`,
+            path: `${process.cwd()}/src/modules/${data.version}/${moduleName}/validators.js`,
             pattern: /(\/\* GENERATED: VALIDATOR .*\*\/)/g,
             template: trimTemplateFile('validator.js.hbs'),
         })
         actions.push({
             type: 'modify',
-            path: `${process.cwd()}/src/modules/${versionName}/${moduleName}/validators.js`,
+            path: `${process.cwd()}/src/modules/${data.version}/${moduleName}/validators.js`,
             pattern: /(\n\s*)(\/\* GENERATED: EXPORT .*\*\/)/g,
             template: '$1{{ camelCase handler }},$1$2 ',
         })

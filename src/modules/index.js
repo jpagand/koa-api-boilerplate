@@ -2,10 +2,10 @@ import glob from 'glob'
 import Router from 'koa-router'
 
 const initModules = (api, versionPath) => {
-    const versionName = versionPath.split('/').pop();
+    const versionName = versionPath.split('/').pop()
 
     glob(`${versionPath}/*`, {
-        ignore: '**/index.js'
+        ignore: '**/index.js',
     }, (err, matches) => {
         if (err) {
             throw err
@@ -22,12 +22,12 @@ const initModules = (api, versionPath) => {
                 const {
                     method = '',
                     route = '',
-                    handlers = []
+                    handlers = [],
                 } = config
 
                 const lastHandler = handlers.pop()
 
-                instance[method.toLowerCase()](route, ...handlers, async function(ctx) {
+                instance[method.toLowerCase()](route, ...handlers, async function (ctx) {
                     return await lastHandler(ctx)
                 })
             })
@@ -47,7 +47,7 @@ const initModules = (api, versionPath) => {
 
 export default function initVersions (api) {
     glob(`${__dirname}/*`, {
-        ignore: '**/index.js'
+        ignore: '**/index.js',
     }, (err, matches) => {
         if (err) {
             throw err

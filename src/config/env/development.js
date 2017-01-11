@@ -1,5 +1,5 @@
 export default {
     dev: true,
     host: 'localhost',
-    port: 5000
+    port: 5000,
 }

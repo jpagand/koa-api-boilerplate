@@ -14,7 +14,7 @@ const saveUpload = async (file) => {
             name: file.name,
             path: file.path,
             size: file.size,
-            mimeType: file.type
+            mimeType: file.type,
         })
         try {
             await upload.save()

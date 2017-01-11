@@ -5,6 +5,6 @@ export default [
         firstName: 'Admin',
         lastName: 'koaApiBoilerplate',
         maps: [],
-        isOrganizer: true
-    }
+        isOrganizer: true,
+    },
 ]

@@ -7,23 +7,23 @@ const Types = mongoose.Schema.Types
 const User = new mongoose.Schema({
     type: {
         type: String,
-        default: 'User'
+        default: 'User',
     },
     firstName: {
-        type: String
+        type: String,
     },
     lastName: {
-        type: String
+        type: String,
     },
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
 }, {timestamps: true})
 
 User.pre('save', function preSave (next) {
@@ -73,7 +73,7 @@ User.methods.generateToken = function generateToken () {
     const user = this
 
     return jwt.sign({
-        id: user.id
+        id: user.id,
     }, config.token)
 }
 

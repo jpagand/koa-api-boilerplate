@@ -12,13 +12,13 @@ const populateUsers = async () => {
     Users.forEach(async elem => {
         const user = new User(elem)
         await user.save()
-    });
+    })
     console.log('Users successfully added !')
 }
 
 const populateDatabase = async () => {
     console.log('Populating mongo database ...')
-    await populateUsers();
+    await populateUsers()
     console.log('Database successfully populated !')
 }
 

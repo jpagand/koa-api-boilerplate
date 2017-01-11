@@ -1,10 +1,10 @@
 import User from 'models/users'
 import config from 'config'
 import {
-    getToken
+    getToken,
 } from '../utils/auth'
 import {
-    verify
+    verify,
 } from 'jsonwebtoken'
 
 export async function ensureUser (ctx, next) {
