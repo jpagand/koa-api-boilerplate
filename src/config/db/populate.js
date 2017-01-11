@@ -1,19 +1,23 @@
 import config from '../'
 import mongoose from 'mongoose'
 
-mongoose.Promise = global.Promise
-mongoose.connect(config.database)
-
 import User from 'models/users'
 import Users from './users'
 
+mongoose.Promise = global.Promise
+mongoose.connect(config.database)
+
 const populateUsers = async () => {
     console.log('Adding users ...')
-    Users.forEach(async elem => {
-        const user = new User(elem)
-        await user.save()
-    })
-    console.log('Users successfully added !')
+    for (let elem of Users) {
+        try {
+            const user = new User(elem)
+            await user.save()
+            console.log(` --> User ${user._id} successfully created !`)
+        } catch (e) {
+            console.log(e)
+        }
+    }
 }
 
 const populateDatabase = async () => {
@@ -25,27 +29,27 @@ const populateDatabase = async () => {
 const dropDB = async() => {
     console.log('Dropping mongo database ...')
     const models = [User]
-    await models.forEach(async (model) => {
+    for (let model of models) {
         try {
             await model.collection.drop()
-            console.log(`${model.collection.name} dropped`)
+            console.log(` --> ${model.collection.name} dropped`)
         } catch (e) {
             console.error(e)
         }
-    })
+    }
     console.log('Database successfully dropped !')
 }
 
-const run = async () => {
+const run = async function run () {
     console.log('Start populate script ...')
-    await dropDB(noIF)
-    await populateDatabase().exit(1)
+    await dropDB()
+    await populateDatabase()
     console.log('Populate script successfully executed !')
 }
 
-try {
-    run().then(() => process.exit(0))
-} catch (e) {
+run().then(() => {
+    process.exit(0)
+}).catch((e) => {
     console.error(e)
     process.exit(1)
-}
+})
