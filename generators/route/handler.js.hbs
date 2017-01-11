@@ -1,8 +1,8 @@
 /**
  *   TODO: endpoint description and Success example
  *
- * @api {{ curly true }}{{ constantCase method }}{{ curly }} {{ url }} {{ properCase handler}}
- * @apiPermission
+ * @api {{ curly true }}{{ constantCase method }}{{ curly }} {{ url }} {{ properCase handler}}{{#if secureRoute}}
+ * @apiPermission user{{/if}}
  * @apiVersion {{ apiVersion }}.0.0
  * @apiName {{ properCase handler}}
  * @apiGroup {{ properCase module}}
