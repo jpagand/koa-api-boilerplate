@@ -26,7 +26,7 @@ const initApi = () => {
         multipart: true,
     }))
 
-    if (process.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV !== 'development') {
         api.use(convert(logger()))
     }
     api.use(convert(validate()))
