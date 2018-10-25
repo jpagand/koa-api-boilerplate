@@ -1,0 +1,157 @@
+import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
+import config from 'config'
+import jwt from 'jsonwebtoken'
+const authTypes = ['twitter', 'facebook', 'google']
+const Types = mongoose.Schema.Types
+
+const User = new mongoose.Schema({
+  firstName: {
+    type: Types.String,
+  },
+  lastName: {
+    type: Types.String,
+  },
+  email: {
+    type: Types.String,
+    lowercase: true,
+    required () {
+      if (authTypes.indexOf(this.provider) === -1) {
+        return true
+      } else {
+        return false
+      }
+    },
+  },
+  role: {
+    type: String,
+    default: 'user',
+  },
+  password: {
+    type: Types.String,
+    required () {
+      if (authTypes.indexOf(this.provider) === -1) {
+        return true
+      } else {
+        return false
+      }
+    },
+  },
+  provider: String,
+  salt: String,
+  facebook: {},
+  twitter: {},
+  google: {},
+}, {timestamps: true})
+
+// Public profile information
+User
+.virtual('profile')
+.get(function () {
+  return {
+    _id: this._id,
+    firstName: this.firstName,
+    lastName: this.lastName,
+    role: this.role,
+    email: this.email,
+  }
+})
+
+User
+.path('email')
+.validate(function (email) {
+  if (authTypes.indexOf(this.provider) !== -1) {
+    return true
+  }
+  return email.length
+}, 'Email cannot be blank')
+
+User
+.path('email')
+.validate(function (value, respond) {
+  if (authTypes.indexOf(this.provider) !== -1) {
+    return respond(true)
+  }
+
+  return this.constructor.findOne({ email: value }).exec()
+  .then(user => {
+    if (user) {
+      if (this.id === user.id) {
+        return respond(true)
+      }
+      return respond(false)
+    }
+    return respond(true)
+  })
+  .catch(function (err) {
+    throw err
+  })
+}, 'The specified email address is already in use.')
+
+User
+.path('password')
+.validate(function (password) {
+  if (authTypes.indexOf(this.provider) !== -1) {
+    return true
+  }
+  return password.length
+}, 'Password cannot be blank')
+
+User.pre('save', function preSave (next) {
+  const user = this
+
+  if (!user.isModified('password')) {
+    return next()
+  }
+  if (!user.password || !user.password.length) {
+    if (authTypes.indexOf(user.provider) === -1) {
+      return next(new Error('Invalid password'))
+    } else {
+      return next()
+    }
+  }
+
+  new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) {
+        return reject(err)
+      }
+      resolve(salt)
+    })
+  })
+  .then(salt => {
+    user.salt = salt
+    bcrypt.hash(user.password, salt, (err, hash) => {
+      if (err) {
+        throw new Error(err)
+      }
+      user.password = hash
+      next(null)
+    })
+  })
+  .catch(err => next(err))
+})
+
+User.methods.validatePassword = function validatePassword (password) {
+  const user = this
+
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (err) {
+        return reject(err)
+      }
+      resolve(isMatch)
+    })
+  })
+}
+
+User.methods.generateToken = function generateToken () {
+  const user = this
+
+  return jwt.sign({
+    id: user.id,
+    roler: user.role,
+  }, config.token)
+}
+
+export default mongoose.model('user', User)

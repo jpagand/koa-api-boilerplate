@@ -1,0 +1,19 @@
+/*
+ *
+ * {{ camelCase name }} routes
+ *
+ */
+import Router from 'koa-router'
+import * as auth from 'auth/middlewares'
+import * as validators from './validators'
+import * as controller from './controller'
+const router = Router()
+
+router.post('/', auth.isAuthenticated, validators.create{{ properCase name}}, controller.create{{ properCase name}})
+router.get('/:id', controller.get{{ properCase name}})
+router.get('/', controller.get{{ properCase name}}s)
+router.put('/:id', auth.isAuthenticated, validators.update{{ properCase name}}, controller.update{{ properCase name}})
+router.delete('/:id', auth.isAuthenticated, controller.delete{{ properCase name}})
+/** GENERATED ROUTES. DO NOT TOUCH **/
+
+export default Router().use('/v1/{{ dashCase name }}s', router.routes(), router.allowedMethods())

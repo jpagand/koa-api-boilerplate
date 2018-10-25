@@ -6,11 +6,13 @@ import logger from 'koa-logger'
 import validate from 'koa-validation'
 import KoaQuery from 'koa-qs'
 import passport from 'koa-passport'
+/** GENERATED IMPORTS. DO NOT TOUCH **/
+import session from 'koa-generic-session'
+import MongoStore from 'koa-generic-session-mongo'
 
 import mongoose from 'mongoose'
 
 import config from './config'
-import 'config/passport'
 
 import {errorMiddleware, documentation, uploads} from 'middleware'
 import modules from 'modules'
@@ -33,6 +35,12 @@ const initApi = () => {
     KoaQuery(api)
     api.use(errorMiddleware())
     api.use(passport.initialize())
+
+    /** GENERATED CONTENT. DO NOT TOUCH **/
+    api.keys = ['your-session-secret', 'another-session-secret']
+    api.use(convert(session({
+        store: new MongoStore(),
+    })))
 
     documentation(api)
     modules(api)

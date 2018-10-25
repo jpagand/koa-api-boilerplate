@@ -1,0 +1,16 @@
+import Router from 'koa-router'
+import passport from 'koa-passport'
+import {setTokenCookie} from '../middlewares'
+
+var router = Router()
+
+router.get('/', passport.authenticate('twitter', {
+  failureRedirect: '/signup',
+  session: false,
+}))
+  .get('/callback', passport.authenticate('twitter', {
+    failureRedirect: '/signup',
+    session: false,
+  }), setTokenCookie)
+
+export default router

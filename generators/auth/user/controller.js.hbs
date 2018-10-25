@@ -1,0 +1,268 @@
+import User from 'models/users'
+
+/**
+ * @api {post} /v1/users Create a new user
+ * @apiVersion 1.0.0
+ * @apiName CreateUser
+ * @apiGroup Users
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X POST -d '{ "email": "johndoe@example.com", "password": "secretpass" }' localhost:5000/v1/users
+ *
+
+ * @apiParam {String} email Email. (required)
+ * @apiParam {String} password Password. (required)
+ * @apiParam {String} firstName First name.
+ * @apiParam {String} lastName Lirst name.
+ *
+ * @apiSuccess {Object}   user           User object
+ * @apiSuccess {ObjectId} user._id       User id
+ * @apiSuccess {String}   user.email      User email
+ * @apiSuccess {String}   user.role  User role
+ * @apiSuccess {String}   token  Authentication token
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "user": {
+ *          "updatedAt": "2017-07-19T09:00:30.338Z",
+ *          "createdAt": "2017-07-19T09:00:30.338Z",
+ *          "provider": "local",
+ *          "email": "johndoe@example.com",
+ *          "_id": "596f1faefc91446ff443a676",
+ *          "role": "user",
+ *       },
+ *       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NmYxZmFlZmM5MTQ0NmZmNDQzYTY3NiIsInJvbGVyIjoidXNlciIsImlhdCI6MTUwMDQ1NDgzMH0.kTCWlITO6oZTuUrrlpx6-7Bx58rp0sFb54P1qyioCuo"
+ *     }
+ *
+ * @apiError UnprocessableEntity Missing required parameters
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 422 Unprocessable Entity
+ *     {
+ *       "status": 422,
+ *       "error": "Unprocessable Entity"
+ *     }
+ */
+const createUser = async(ctx) => {
+  const user = new User(ctx.request.body)
+  user.provider = 'local'
+  user.role = 'user'
+  try {
+    await user.save()
+  } catch (err) {
+    ctx.throw(422, err)
+  }
+
+  const token = user.generateToken()
+  const response = user.toJSON()
+
+  delete response.password
+  delete response.salt
+
+  ctx.body = {
+    user: response,
+    token,
+  }
+}
+
+/**
+ * @api {get} /v1/users/:id Get a user profile
+ * @apiPermission user
+ * @apiVersion 1.0.0
+ * @apiName GetUser
+ * @apiGroup Users
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X GET localhost:5000/v1/users/56bd1da600a526986cf65c80
+ *
+ * @apiSuccess {Object}   users           User object
+ * @apiSuccess {ObjectId} users._id       User id
+ * @apiSuccess {String}   users.firstName      User First name
+ * @apiSuccess {String}   users.lastName      User Last name
+ * @apiSuccess {String}   users.email  User email
+ * @apiSuccess {String}   users.role  User role
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "user": {
+ *          "email": "johndoe@example.com",
+ *          "_id": "596f1faefc91446ff443a676",
+ *          "role": "user",
+ *       }
+ *     }
+ *
+ * @apiUse TokenError
+ */
+const getUser = async(ctx, next) => {
+  try {
+    const user = await User.findById(ctx.params.id)
+    ctx.body = {
+      user: user.profile,
+    }
+  } catch (err) {
+    throw (500, err)
+  }
+}
+
+/**
+ * @api {get} /v1/users/?limit=:limit&skip=:skip Get all users using pagination
+ * @apiPermission user
+ * @apiVersion 1.0.0
+ * @apiName GetUsers
+ * @apiGroup Users
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X GET localhost:5000/v1/users/?limit=10&skip=20
+ *
+ * @apiParam {Number} [limit=20]     Optional Limit with default 20.
+ * @apiParam {Number} [skip=0]     Optional Skip with default 0.
+ *
+ * @apiSuccess {Object}   users           User object
+ * @apiSuccess {ObjectId} users._id       User id
+ * @apiSuccess {String}   users.name      User name
+ * @apiSuccess {String}   users.username  User username
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "users": [{
+ *          "updatedAt": "2017-07-19T09:00:30.338Z",
+ *          "createdAt": "2017-07-19T09:00:30.338Z",
+ *          "provider": "local",
+ *          "email": "johndoe@example.com",
+ *          "_id": "596f1faefc91446ff443a676",
+ *          "role": "user",
+ *       },{
+ *          "updatedAt": "2017-07-18T09:00:30.338Z",
+ *          "createdAt": "2017-07-18T09:00:30.338Z",
+ *          "provider": "local",
+ *          "email": "janedoe@example.com",
+ *          "_id": "5910798ec3b01c36b4ea55ab",
+ *          "role": "admin",
+ *       }]
+ *     }
+ *
+ * @apiUse TokenError
+ */
+const getUsers = async(ctx, next) => {
+  const skip = ctx.request.query.skip || 0
+  const limit = ctx.request.query.limit || 20
+  const users = await User.find({})
+                    .sort('-_id')
+                    .skip(skip)
+                    .limit(limit)
+                    .select('-password -salt')
+  ctx.body = {
+    users: users,
+  }
+}
+
+/**
+ * @api {get} /v1/users/me Get my profile
+ * @apiPermission user
+ * @apiVersion 1.0.0
+ * @apiName Me
+ * @apiGroup Users
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X GET localhost:5000/v1/users/me
+ *
+ * @apiSuccess {Object}   users           User object
+ * @apiSuccess {ObjectId} users._id       User id
+ * @apiSuccess {String}   users.email      User email
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "user": {
+ *          "updatedAt": "2017-07-19T09:00:30.338Z",
+ *          "createdAt": "2017-07-19T09:00:30.338Z",
+ *          "provider": "local",
+ *          "email": "johndoe@example.com",
+ *          "_id": "596f1faefc91446ff443a676",
+ *          "role": "user",
+ *       }
+ *     }
+ *
+ * @apiUse TokenError
+ */
+const me = async(ctx, next) => {
+  ctx.body = {
+    user: ctx.state.user,
+  }
+}
+
+/**
+ * @api {delete} /users/:id Delete a user
+ * @apiPermission user
+ * @apiVersion 1
+ * @apiName DeleteUser
+ * @apiGroup Users
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X DELETE localhost:5000/v1/users/56bd1da600a526986cf65c80
+ *
+ * @apiSuccess {StatusCode} 200
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 204 No Content
+ *
+ * @apiUse TokenError
+ */
+
+const deleteUser = async(ctx) => {
+  try {
+    await User.findByIdAndRemove(ctx.params.id)
+    ctx.status = 204
+  } catch (err) {
+    ctx.throw(500, err)
+  }
+}
+
+/**
+ * @api {put} /v1/users/password Create a new user
+ * @apiVersion 1.0.0
+ * @apiName ChangePassword
+ * @apiGroup Users
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X PUT -d '{ "newPassword": "newpass", "oldPassword": "secretpass" }' localhost:5000/v1/users/changePassword
+ *
+ * @apiParam {String} newPassword Password. (required)
+ * @apiParam {String} oldPassword Password. (required)
+ *
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 204 No Content
+ */
+const changePassword = async(ctx) => {
+  const oldPassword = ctx.request.body.oldPassword
+  const newPassword = ctx.request.body.newPassword
+  const user = await User.findById(ctx.state.user._id) // need this because we dont select the password in isAuthenticated
+  const isMatch = await user.validatePassword(oldPassword)
+  if (isMatch) {
+    user.password = newPassword
+    try {
+      await user.save()
+      ctx.status = 204
+    } catch (err) {
+      ctx.throw(500, err)
+    }
+  } else {
+    ctx.throw(403)
+  }
+}
+
+/** GENERATED CONTENT. DO NOT TOUCH **/
+
+export {
+    createUser,
+    getUsers,
+    getUser,
+    me,
+    deleteUser,
+    changePassword,
+    /** GENERATED EXPORT. DO NOT TOUCH **/
+}

@@ -8,13 +8,15 @@ const moduleGen = require('./module')
 const route = require('./route')
 const model = require('./model')
 const version = require('./version')
+const auth = require('./auth')
 
 module.exports = (plop) => {
-    plop.addPrompt('recursive', require('inquirer-recursive'))
-    plop.addHelper('curly', (object, open) => (open ? '{' : '}'))
+  plop.addPrompt('recursive', require('inquirer-recursive'))
+  plop.addHelper('curly', (object, open) => (open ? '{' : '}'))
 
-    plop.setGenerator('module', moduleGen)
-    plop.setGenerator('route', route)
-    plop.setGenerator('model', model)
-    plop.setGenerator('version', version)
+  plop.setGenerator('module', moduleGen)
+  plop.setGenerator('route', route)
+  plop.setGenerator('model', model)
+  plop.setGenerator('version', version)
+  plop.setGenerator('auth', auth)
 }

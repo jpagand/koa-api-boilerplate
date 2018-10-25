@@ -1,0 +1,74 @@
+import config from 'config'
+import {verify} from 'jsonwebtoken'
+import User from 'models/users'
+
+const getToken = (ctx) => {
+  const header = ctx.request.header.authorization
+  if (header) {
+    const parts = header.split(' ')
+    if (parts.length !== 2) {
+      return null
+    }
+    const scheme = parts[0]
+    const token = parts[1]
+    if (/^Bearer$/i.test(scheme)) {
+      return token
+    }
+  }
+    // allow token to be passed through query parameter or cookie
+  return ctx.request.query.token || ctx.cookies.get('token')
+}
+
+/**
+* Attaches the user object to the request if authenticated
+* Otherwise returns 403
+*/
+export async function isAuthenticated (ctx, next = () => {}) {
+  const token = getToken(ctx)
+  if (!token) {
+    ctx.throw(401)
+    return next()
+  }
+
+  let decoded = null
+  try {
+    decoded = verify(token, config.token)
+  } catch (err) {
+    ctx.throw(401)
+    return next()
+  }
+
+  ctx.state.user = await User.findById(decoded.id, '-password -salt')
+  if (!ctx.state.user) {
+    ctx.throw(401)
+  }
+  return next()
+}
+
+/**
+* Checks if the user role meets the minimum requirements of the route
+*/
+export function hasRole (roleRequired) {
+  if (!roleRequired) {
+    throw new Error('Required role needs to be set')
+  }
+  return async function (ctx, next) {
+    await isAuthenticated(ctx)
+    if (ctx.state.user.role !== roleRequired) {
+      ctx.throw(403, 'Forbidden')
+    }
+    return next()
+  }
+}
+
+/**
+* Set token cookie directly for oAuth strategies
+*/
+export function setTokenCookie (ctx, next) {
+  if (!ctx.state.user) {
+    return ctx.throw(404, 'It looks like you aren\'t logged in, please try again.')
+  }
+  var token = ctx.state.user.generateToken()
+  ctx.cookies.set('token', token)
+  ctx.redirect('/')
+}

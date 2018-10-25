@@ -9,7 +9,7 @@ const errorMiddleware = () => {
             ctx.status = err.status || 500
             ctx.body = {
                 sucess: false,
-                err: err instanceof Error ? err.message : err,
+                err: err,
             }
             ctx.app.emit('error', err, ctx)
         }

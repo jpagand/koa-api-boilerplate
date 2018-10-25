@@ -1,0 +1,24 @@
+import Router from 'koa-router'
+import passport from 'koa-passport'
+
+var router = Router()
+
+router.post('/', (ctx, next) => {
+  return passport.authenticate('local', function (user, err) {
+    if (err) {
+      return ctx.throw(401, err)
+    }
+    if (!user) {
+      return ctx.throw(404, 'Something went wrong, please try again.')
+    }
+    const token = user.generateToken()
+    const response = user.toJSON()
+    delete response.password
+    ctx.body = {
+      token,
+      user: response,
+    }
+  })(ctx, next)
+})
+
+export default router

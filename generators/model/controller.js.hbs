@@ -1,0 +1,213 @@
+/*
+ *
+ * {{lowerCase name }} controller
+ *
+ */
+import {{ properCase name }} from 'models/{{ camelCase name }}s'
+import { getSortQuery } from 'utils/restQuery'
+
+
+/**
+ * @api {post} {{ url }} Create a new {{ camelCase name }}
+ * @apiVersion 1.0.0
+ * @apiName Create{{ properCase name }}
+ * @apiGroup {{ properCase name }}s
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X POST -d '{ "{{ camelCase name }}": { ... } }' localhost:5000{{ url }}
+ *
+ * @apiParam {Object} {{ camelCase name }}          {{ properCase name }} object (required) {{#each fields}}
+ * @apiParam {{ curly true }}{{properCase this.type}}{{ curly }} {{ camelCase name }}.{{camelCase this.name}}{{/each}}
+ *
+ * @apiSuccess {Object}   {{curly true}}{{ camelCase name }}{{ curly }}        {{ properCase name }} object {{#each fields}}
+ * @apiSuccess {{ curly true }}{{properCase this.type}}{{ curly }} {{ camelCase name }}.{{camelCase this.name}}{{/each}}
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": {{ curly true}}{{#each fields}}
+ *          "{{camelCase this.name}}": ...,{{/each}}
+ *       {{ curly }}
+ *     }
+ *
+ * @apiUse TokenError
+ */
+const create{{ properCase name }} = async(ctx) => {
+    const {{ camelCase name }} = new {{ properCase name }}(ctx.request.body)
+    try {
+        await {{ camelCase name }}.save()
+    } catch (err) {
+        ctx.throw(422, err)
+    }
+
+    ctx.body = {
+        data: {{ camelCase name }}.toJSON()
+    }
+}
+
+/**
+ * @api {get} {{ url }}/:id Get {{ camelCase name }} by id
+ * @apiPermission {{ camelCase name }}
+ * @apiVersion 1.0.0
+ * @apiName Get{{ properCase name }}
+ * @apiGroup {{properCase name}}s
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X GET localhost:5000{{ url }}/56bd1da600a526986cf65c80
+ *
+ * @apiSuccess {Object}   {{ camelCase name }}           User object{{#each fields}}
+ * @apiSuccess {{ curly true }}{{properCase this.type}}{{ curly }} {{ camelCase name }}.{{camelCase this.name}}       {{ properCase name }} {{camelCase this.name}}{{/each}}
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": {{ curly true}}{{#each fields}}
+ *          "{{camelCase this.name}}": ...,{{/each}}
+ *       {{ curly }}
+ *     }
+ *
+ */
+const get{{ properCase name }}  = async(ctx, next) => {
+    const {{ camelCase name }} = await {{ properCase name }}.findById(ctx.params.id)
+    ctx.body = {
+        data: {{ camelCase name }},
+    }
+}
+
+/**
+ * @api {put} {{ url }}/:id Update a {{ camelCase name }}
+ * @apiPermission
+ * @apiVersion 1
+ * @apiName Update{{ properCase name }}
+ * @apiGroup {{ properCase name }}s
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X PUT -d '{ "{{ camelCase name }}": { ... } }' localhost:5000{{ url }}/56bd1da600a526986cf65c80
+ *
+ * @apiParam {Object} {{ camelCase name }}          {{ properCase name }} object (required){{#each fields}}
+ * @apiParam {{ curly true }}{{properCase this.type}}{{ curly }} {{ camelCase name }}.{{camelCase this.name}} {{properCase this.name}}.{{/each}}
+ *
+ * @apiSuccess {Object}   {{ camelCase name }}           {{ properCase name }} object{{#each fields}}
+ * @apiSuccess {{ curly true }}{{properCase this.type}}{{ curly }} {{ camelCase name }}s.{{camelCase this.name}}       {{ properCase name }} {{properCase this.name}}{{/each}}
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": {{ curly true}}{{#each fields}}
+ *          "{{camelCase this.name}}": ...,{{/each}}
+ *       {{ curly }}
+ *     }
+ *
+ * @apiError UnprocessableEntity Missing required parameters
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 422 Unprocessable Entity
+ *     {
+ *       "status": 422,
+ *       "error": "Unprocessable Entity"
+ *     }
+ *
+ * @apiUse TokenError
+ */
+const update{{ properCase name }} = async(ctx) => {
+    const {{ camelCase name }} = await {{ properCase name }}.findById(ctx.params.id)
+
+    Object.assign({{ camelCase name }}, ctx.request.body)
+
+    await {{ camelCase name }}.save()
+
+    ctx.body = {
+        data: {{ camelCase name }},
+    }
+}
+
+/**
+ * @api {delete} {{ url }}/:id Delete a {{ camelCase name }}
+ * @apiPermission {{ camelCase name }}
+ * @apiVersion 1
+ * @apiName Delete{{ properCase name }}
+ * @apiGroup {{ properCase name }}s
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X DELETE localhost:5000{{ url }}/56bd1da600a526986cf65c80
+ *
+ * @apiSuccess {StatusCode} 200
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true
+ *     }
+ *
+ * @apiUse TokenError
+ */
+
+const delete{{ properCase name }} = async(ctx) => {
+    const {{ camelCase name }} = await {{ properCase name }}.findById(ctx.params.id)
+
+    await {{ camelCase name }}.remove()
+
+    ctx.status = 200
+    ctx.body = {
+        success: true,
+    }
+}
+
+/**
+ * @api {get} {{ url }} Get users
+ * @apiPermission {{ camelCase name }}
+ * @apiVersion 1.0.0
+ * @apiName Get{{ properCase name }}
+ * @apiGroup {{ properCase name }}s
+ *
+ * @apiExample Example usage:
+ * curl -H "Content-Type: application/json" -X GET localhost:5000{{ url }}
+ *
+ * @apiSuccess {Array}   data           {{ properCase name }}s Array{{#each fields}}
+ * @apiSuccess {{ curly true }}{{properCase this.type}}{{ curly }} {{ camelCase name }}.{{camelCase this.name}} {{properCase this.name}}.{{/each}}
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": [
+ *          {{ curly true}}{{#each fields}}
+ *              "{{camelCase this.name}}": ...,{{/each}}
+ *          {{ curly }}
+ *       ],
+ *       total: ...
+ *     }
+ *
+ */
+const get{{ properCase name }}s = async ctx => {
+  let { pagination, sort, filter } = ctx.query
+
+  const query = getSortQuery(pagination, sort)
+
+  if(filter) {
+    filter = JSON.parse(filter)
+  }
+
+  let queryFilter = {}
+  // TODO implement query filters
+  const {{ camelCase name }}sCount = await {{ properCase name }}.count(queryFilter)
+
+  let {{ camelCase name }}s = await {{ properCase name }}.find(queryFilter, null, query)
+
+  ctx.body = {
+    data: [...{{ camelCase name }}s],
+    total: {{ camelCase name }}sCount,
+  }
+  ctx.status = 200
+}
+
+
+/** GENERATED CONTENT. DO NOT TOUCH **/
+
+export {
+    create{{ properCase name }},
+    get{{ properCase name }},
+    update{{ properCase name }},
+    delete{{ properCase name }},
+    get{{ properCase name }}s,
+    /** GENERATED EXPORT. DO NOT TOUCH **/
+}

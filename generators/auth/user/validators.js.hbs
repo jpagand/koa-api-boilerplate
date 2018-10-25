@@ -1,0 +1,58 @@
+/*
+ *
+ * users validators
+ *
+ */
+
+import convert from 'koa-convert'
+
+const createUser = convert(function * (next) {
+  yield this.validateBody({
+    email: 'required|email',
+    password: 'required|minLength:6',
+  }, null, {
+    before: {
+      email: 'trim|lowercase',
+    },
+  })
+
+  if (this.validationErrors) {
+    this.throw(this.validationErrors, 422)
+  } else {
+    yield next
+  }
+})
+
+const changePassword = convert(function * (next) {
+  yield this.validateBody({
+    oldPassword: 'required|minLength:6',
+    newPassword: 'required|minLength:6',
+  })
+  if (this.validationErrors) {
+    this.throw(this.validationErrors, 422)
+  } else {
+    yield next
+  }
+})
+
+const getUsers = convert(function * (next) {
+  yield this.validateQueries({
+    skip: 'min:0',
+    limit: 'min:1',
+  })
+
+  if (this.validationErrors) {
+    this.throw(this.validationErrors, 422)
+  } else {
+    yield next
+  }
+})
+
+/** GENERATED CONTENT. DO NOT TOUCH **/
+
+export {
+  createUser,
+  getUsers,
+  changePassword,
+  /** GENERATED EXPORT. DO NOT TOUCH **/
+}

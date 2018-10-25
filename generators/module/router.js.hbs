@@ -1,21 +1,19 @@
 /*
  *
- * {{ lowerCase name }} routes
+ * {{ camelCase module }} routes
  *
  */
+import Router from 'koa-router'
 {{#if wantPrivate}}
-import {ensureUser} from 'middleware/validators'  // eslint-disable-line
+import * as auth from 'auth/middlewares'
 {{/if}}
 {{#if wantValidators}}
-import * as validators from './validators' // eslint-disable-line
+import * as validators from './validators'
 {{/if}}
 
-import * as {{ camelCase module }} from './controller'
+import * as controller from './controller'
+const router = Router()
 
-export const baseUrl = '/{{ lowerCase module }}'
+/** GENERATED ROUTES. DO NOT TOUCH **/
 
-const routes = [
-    /* GENERATED: ROUTES DO NOT TOUCH */
-]
-
-export default routes
+export default Router().use('/v1/{{ dashCase module }}', router.routes(), router.allowedMethods())

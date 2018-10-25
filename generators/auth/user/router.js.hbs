@@ -1,0 +1,15 @@
+import Router from 'koa-router'
+import * as controller from './controller'
+import * as auth from '../../../auth/middlewares'
+import * as validators from './validators'
+const router = Router()
+
+router.get('/', auth.hasRole('admin'), validators.getUsers, controller.getUsers)
+router.get('/me', auth.isAuthenticated, controller.me)
+router.get('/:id', controller.getUser)
+router.delete('/:id', auth.hasRole('admin'), controller.deleteUser)
+router.put('/password', auth.isAuthenticated, validators.changePassword, controller.changePassword)
+router.post('/', validators.createUser, controller.createUser)
+/** GENERATED ROUTES. DO NOT TOUCH **/
+
+export default Router().use('/v1/users', router.routes(), router.allowedMethods())

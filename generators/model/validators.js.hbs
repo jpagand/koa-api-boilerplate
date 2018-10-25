@@ -1,0 +1,37 @@
+/*
+ *
+ * {{ lowerCase name }} validators
+ *
+ */
+
+import convert from 'koa-convert'
+
+const {{ lowerCase name }}RequiredFields = {{ curly true }}{{#each fields}}{{#if this.required}}
+    {{ camelCase this.name }}: 'required',{{/if}}{{/each}}
+{{ curly }}
+
+const create{{ properCase name }} = convert(function * (next) {
+    yield this.validateBody({{ lowerCase name }}RequiredFields, null, {})
+
+    if (this.validationErrors) {
+        this.throw(this.validationErrors, 422)
+    } else {
+        yield next
+    }
+})
+
+const update{{ properCase name }} = convert(function * (next) {
+    yield this.validateBody({{ lowerCase name }}RequiredFields, null, {})
+    if (this.validationErrors) {
+        this.throw(this.validationErrors, 422)
+    } else {
+        yield next
+    }
+})
+/** GENERATED CONTENT. DO NOT TOUCH **/
+
+export {
+    create{{ properCase name }},
+    update{{ properCase name }},
+    /** GENERATED EXPORT. DO NOT TOUCH **/
+}

@@ -9,11 +9,14 @@
     "rules": {
         "indent": [
             2,
-            4,
+            2,
             {
                 "SwitchCase": 1
             }
         ],
-        "comma-dangle": ["error", "always-multiline"]
+        "comma-dangle": [
+            "error",
+            "always-multiline"
+        ]
     }
 }

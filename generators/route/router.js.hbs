@@ -1,10 +1,1 @@
-{
-    method: '{{ constantCase method }}',
-    route: '{{ path }}',
-    handlers: [{{#if secureRoute}}
-        ensureUser, {{/if}}{{#if validateRoute}}
-        validators.{{ camelCase handler }}, {{/if}}
-        {{ camelCase module }}.{{ camelCase handler }}
-    ]
-},
-$1$2
+router.{{ lowerCase method }}('{{ path }}', {{#if secureRoute}}auth.isAuthenticated,{{/if}} {{#if validateRoute}}validators.{{ camelCase handler }},{{/if}} controller.{{ camelCase handler }})
