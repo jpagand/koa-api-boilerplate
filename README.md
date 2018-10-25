@@ -74,7 +74,7 @@ KoaJS api boilerplate with generators to easly handle versionning &amp; avoid bo
 - Api documentation with [apidoc](http://apidocjs.com/)
 - Api versionning
 - MongoDB with [mongoose] (http://mongoosejs.com/)
-- User Authentication with [passport](http://passportjs.org/)
+- User Authentication with [passport](http://passportjs.org/) (local, facebook, google, twitter)
 - File upload management
 - Endpoint parameters/files/query validation with [koa-validation](https://koa-validation.readme.io/)
 - Test with [supertest](https://github.com/visionmedia/supertest)
@@ -91,6 +91,8 @@ KoaJS api boilerplate with generators to easly handle versionning &amp; avoid bo
 `npm run generate route`
 4. Mongoose Model
 `npm run generate model`
+5. Authentication
+`npm run generate auth`
 
 ---
 
@@ -163,7 +165,7 @@ KoaJS api boilerplate with generators to easly handle versionning &amp; avoid bo
 
 ## TODO:
 - Improve generators (generate CRUD module for a model, ...)
-- Implement Facebook & Google authentication
+~~- Implement Facebook & Google authentication~~
 - Implement pre commit [linting](https://github.com/typicode/husky)
 
 ---
